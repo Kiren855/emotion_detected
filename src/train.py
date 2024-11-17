@@ -13,7 +13,6 @@ def train_model(root_dir, batch_size=64, epochs=20, output_model="emotion_model.
     train_gen, val_gen, _ = create_generators(train_dir, val_dir, None, batch_size)
 
     strategy = tf.distribute.MirroredStrategy() 
-    print(f"Number of devices: {strategy.num_replicas_in_sync}")
 
     with strategy.scope():  
         model = build_model()
