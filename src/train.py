@@ -17,7 +17,10 @@ def train_model(root_dir, batch_size=64, epochs=20, output_model="emotion_model.
     train_dir = os.path.join(root_dir, "train")
     
     train_gen, val_gen, _ = create_generators(train_dir, None, batch_size)
-
+    
+    print("so luong train: ", train_gen)
+    print("so luong val: ", val_gen)
+    
     model = build_model()
     
     model.compile(loss="categorical_crossentropy", 
@@ -25,6 +28,7 @@ def train_model(root_dir, batch_size=64, epochs=20, output_model="emotion_model.
                   metrics=['accuracy'])
         
     checkpoint = ModelCheckpoint(output_model_path, monitor="val_accuracy", save_best_only=True)
+    
     
     history = model.fit(
                 train_gen,
