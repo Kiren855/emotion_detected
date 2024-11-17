@@ -25,6 +25,9 @@ def train_model(root_dir, batch_size=64, epochs=20, output_model="emotion_model.
     
     train_gen, val_gen, _ = create_generators(root_dir, batch_size)
     
+    print("size train: ", train_gen)
+    print("\nsize val: ", val_gen)
+    
     model = build_model()
     
     model.compile(loss="categorical_crossentropy", 
@@ -33,15 +36,35 @@ def train_model(root_dir, batch_size=64, epochs=20, output_model="emotion_model.
         
     checkpoint = ModelCheckpoint(output_model_path, monitor="val_accuracy", save_best_only=True)
     
+    early_stopping = tf.keras.callbacks.EarlyStopping(
+        monitor='val_accuracy',
+        min_delta=0.00008,
+        patience=11,
+        verbose=1,
+        restore_best_weights=True,
+    )
+
+    lr_scheduler = tf.keras.callbacks.ReduceLROnPlateau(
+        monitor='val_accuracy',
+        min_delta=0.0001,
+        factor=0.25,
+        patience=4,
+        min_lr=1e-7,
+        verbose=1,
+    )
+    
     history = model.fit(
-                train_gen,
-                steps_per_epoch=len(train_gen),
-                validation_data=val_gen,
-                validation_steps = len(val_gen), 
-                epochs=epochs, 
-                callbacks=[checkpoint],
-                verbose=1
-            )
+        train_gen,
+        steps_per_epoch=len(train_gen),
+        epochs=epochs,
+        validation_data=val_gen,
+        validation_steps=len(val_gen),
+        callbacks=[
+            early_stopping,
+            lr_scheduler,
+            checkpoint
+        ]
+    )
     
     history_df = pd.DataFrame(history.history)
     history_df.to_csv(history_csv_path, index=False)
