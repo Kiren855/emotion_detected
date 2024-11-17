@@ -1,7 +1,7 @@
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Dropout, Flatten, BatchNormalization, MaxPooling2D, Conv2D
 
-def build_model(input_shape=(48, 48, 3)):
+def build_model(input_shape=(48, 48, 1)):
     model = Sequential()
     model.add(Conv2D(32, (3,3), padding="Same", activation='relu', input_shape=input_shape))
     model.add(BatchNormalization())
