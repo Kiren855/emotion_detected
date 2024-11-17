@@ -1,7 +1,7 @@
 import os
 import numpy as np
 from tensorflow.keras.models import load_model
-from src.dataset import create_generators
+from dataset import create_generators
 from sklearn.metrics import classification_report, confusion_matrix
 import matplotlib.pyplot as plt
 import seaborn as sns

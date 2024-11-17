@@ -1,8 +1,8 @@
 import os
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.callbacks import ModelCheckpoint
-from src.dataset import create_generators
-from src.model import build_model
+from dataset import create_generators
+from model import build_model
 
 def train_model(root_dir, batch_size=64, epochs=20, output_model="emotion_model.h5"):
     train_dir = os.path.join(root_dir, "train")
