@@ -6,7 +6,7 @@ from model import build_model
 
 def train_model(root_dir, batch_size=64, epochs=20, output_model="emotion_model.h5"):
     train_dir = os.path.join(root_dir, "train")
-    val_dir = os.path.join(root_dir, "val")
+    val_dir = os.path.join(root_dir, "validaton")
 
     train_gen, val_gen, _ = create_generators(train_dir, val_dir, "", batch_size)
 
