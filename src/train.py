@@ -1,4 +1,5 @@
 import os
+import tensorflow as tf
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.callbacks import ModelCheckpoint
 from tensorflow.keras.utils import Progbar
@@ -11,29 +12,31 @@ def train_model(root_dir, batch_size=64, epochs=20, output_model="emotion_model.
 
     train_gen, val_gen, _ = create_generators(train_dir, val_dir, None, batch_size)
 
-    model = build_model()
+    strategy = tf.distribute.MirroredStrategy() 
+    print(f"Number of devices: {strategy.num_replicas_in_sync}")
 
-    model.compile(
-        optimizer=Adam(learning_rate=0.0001),
-        loss="categorical_crossentropy",
-        metrics=["accuracy"]
-    )
-
-    checkpoint = ModelCheckpoint(output_model, monitor="val_accuracy", save_best_only=True)
-    progbar = Progbar(epochs)
-    
-    for epoch in range(epochs):
-        print(f"\nEpoch {epoch + 1}/{epochs}")
-        
-        history = model.fit(
-            train_gen,
-            validation_data=val_gen, 
-            epochs=1, 
-            callbacks=[checkpoint],
-            verbose=1
+    with strategy.scope():  
+        model = build_model()
+        model.compile(
+            optimizer=Adam(learning_rate=0.0001),
+            loss="categorical_crossentropy",
+            metrics=["accuracy"]
         )
-        
-        progbar.update(epoch + 1)
+
+        checkpoint = ModelCheckpoint(output_model, monitor="val_accuracy", save_best_only=True)
+        progbar = Progbar(epochs)
+
+        for epoch in range(epochs):
+            print(f"\nEpoch {epoch + 1}/{epochs}")
+
+            history = model.fit(
+                train_gen,
+                validation_data=val_gen, 
+                epochs=1, 
+                callbacks=[checkpoint],
+                verbose=1
+            )
+            progbar.update(epoch + 1)
 
     print("Training complete. Best model saved to:", output_model)
 
