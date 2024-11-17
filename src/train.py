@@ -1,11 +1,9 @@
 import os
-import tensorflow as tf
 import pandas as pd
-from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.callbacks import ModelCheckpoint
-from tensorflow.keras.utils import Progbar
 from dataset import create_generators
 from model import build_model
+import tensorflow as tf 
 
 def train_model(root_dir, batch_size=64, epochs=20, output_model="emotion_model.h5"):
     result_folder = "result"
@@ -20,19 +18,15 @@ def train_model(root_dir, batch_size=64, epochs=20, output_model="emotion_model.
 
     train_gen, val_gen, _ = create_generators(train_dir, None, batch_size)
 
-    strategy = tf.distribute.MirroredStrategy() 
+    model = build_model()
+    
+    model.compile(loss="categorical_crossentropy", 
+                  optimizer= tf.keras.optimizers.Adam(lr=0.0001), 
+                  metrics=['accuracy'])
+        
+    checkpoint = ModelCheckpoint(output_model_path, monitor="val_accuracy", save_best_only=True)
 
-    with strategy.scope():  
-        model = build_model()
-        model.compile(
-            optimizer=Adam(learning_rate=0.0001),
-            loss="categorical_crossentropy",
-            metrics=["accuracy"]
-        )
-
-        checkpoint = ModelCheckpoint(output_model_path, monitor="val_accuracy", save_best_only=True)
-
-        history = model.fit(
+    history = model.fit(
                 train_gen,
                 steps_per_epoch=len(train_gen),
                 validation_data=val_gen,

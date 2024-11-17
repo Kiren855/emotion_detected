@@ -1,6 +1,6 @@
-from tensorflow.keras.layers import Dense, Dropout, Flatten, Conv2D, MaxPooling2D, BatchNormalization
+from tensorflow.keras.layers import Dense, Dropout, Flatten
+from tensorflow.keras.layers import Conv2D, MaxPooling2D, BatchNormalization
 from tensorflow.keras.models import Sequential
-import tensorflow as tf
 
 def build_model(input_shape=(48, 48, 1)):
     model = Sequential()
