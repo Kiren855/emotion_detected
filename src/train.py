@@ -28,9 +28,9 @@ def train_model(root_dir, batch_size=64, epochs=20, output_model="emotion_model.
     
     history = model.fit(
                 train_gen,
-                steps_per_epoch=28709 // 64,
+                steps_per_epoch=22968 // 64,
                 validation_data=val_gen,
-                validation_steps=7178 // 64, 
+                validation_steps=5741 // 64, 
                 epochs=epochs, 
                 callbacks=[checkpoint],
                 verbose=1
