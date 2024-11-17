@@ -17,9 +17,8 @@ def train_model(root_dir, batch_size=64, epochs=20, output_model="emotion_model.
     history_csv_path = os.path.join(result_folder, "training_history.csv")
 
     train_dir = os.path.join(root_dir, "train")
-    val_dir = os.path.join(root_dir, "validation")
 
-    train_gen, val_gen, _ = create_generators(train_dir, val_dir, None, batch_size)
+    train_gen, val_gen, _ = create_generators(train_dir, None, batch_size)
 
     strategy = tf.distribute.MirroredStrategy() 
 
