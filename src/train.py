@@ -4,6 +4,9 @@ from tensorflow.keras.callbacks import ModelCheckpoint
 from dataset import create_generators
 from model import build_model
 import tensorflow as tf 
+import logging
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' 
+tf.get_logger().setLevel(logging.ERROR)
 
 def train_model(root_dir, batch_size=64, epochs=20, output_model="emotion_model.h5"):
     result_folder = "result"
@@ -18,9 +21,6 @@ def train_model(root_dir, batch_size=64, epochs=20, output_model="emotion_model.
     
     train_gen, val_gen, _ = create_generators(train_dir, None, batch_size)
     
-    print("so luong train: ", len(train_gen))
-    print("so luong val: ", len(val_gen))
-    
     model = build_model()
     
     model.compile(loss="categorical_crossentropy", 
@@ -29,12 +29,11 @@ def train_model(root_dir, batch_size=64, epochs=20, output_model="emotion_model.
         
     checkpoint = ModelCheckpoint(output_model_path, monitor="val_accuracy", save_best_only=True)
     
-    
     history = model.fit(
                 train_gen,
-                steps_per_epoch=22968 // 64,
+                steps_per_epoch = len(train_gen.filenames) // batch_size,
                 validation_data=val_gen,
-                validation_steps=5741 // 64, 
+                validation_steps = len(val_gen.filenames) // batch_size, 
                 epochs=epochs, 
                 callbacks=[checkpoint],
                 verbose=1
