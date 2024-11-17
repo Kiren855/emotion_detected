@@ -6,8 +6,11 @@ from model import build_model
 import tensorflow as tf 
 import logging
 import warnings
-warnings.filterwarnings("ignore", category=UserWarning, module="keras")
+warnings.filterwarnings("ignore")
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' 
+os.environ['TF_XLA_FLAGS'] = '--tf_xla_enable_xla_devices=false'
+os.environ['TF_TRT_ALLOW_FLATBUFFER'] = '1'
+
 tf.get_logger().setLevel(logging.ERROR)
 
 def train_model(root_dir, batch_size=64, epochs=20, output_model="emotion_model.h5"):
