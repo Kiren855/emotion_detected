@@ -13,6 +13,7 @@ os.environ['TF_TRT_ALLOW_FLATBUFFER'] = '1'
 
 tf.get_logger().setLevel(logging.ERROR)
 
+
 def train_model(root_dir, batch_size=64, epochs=20, output_model="emotion_model.h5"):
     result_folder = "result"
 
@@ -21,10 +22,8 @@ def train_model(root_dir, batch_size=64, epochs=20, output_model="emotion_model.
     
     output_model_path = os.path.join(result_folder, output_model)
     history_csv_path = os.path.join(result_folder, "training_history.csv")
-
-    train_dir = os.path.join(root_dir, "train")
     
-    train_gen, val_gen, _ = create_generators(train_dir, None, batch_size)
+    train_gen, val_gen, _ = create_generators(root_dir, batch_size)
     
     model = build_model()
     
