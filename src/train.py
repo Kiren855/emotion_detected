@@ -23,7 +23,7 @@ def train_model(root_dir, batch_size=64, epochs=20, output_model="emotion_model.
     output_model_path = os.path.join(result_folder, output_model)
     history_csv_path = os.path.join(result_folder, "training_history.csv")
     
-    train_gen, val_gen, _ = create_generators(root_dir, batch_size)
+    train_gen, val_gen, _, _ = create_generators(root_dir, batch_size)
     
     x_train, y_train = next(train_gen)
     x_val, y_val = next(val_gen)

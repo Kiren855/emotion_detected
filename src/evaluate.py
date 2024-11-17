@@ -5,9 +5,10 @@ from dataset import create_generators
 from sklearn.metrics import classification_report, confusion_matrix
 import matplotlib.pyplot as plt
 import seaborn as sns
+CLASS_NAMES = ['Fear', 'Happy', 'Sad', 'Surprise', 'Neutral']
 
 def evaluate_model(model_path, root_dir, batch_size=64):
-    _, _, test_gen = create_generators(root_dir, batch_size)
+    _, _, test_gen, test_labels = create_generators(root_dir, batch_size)
 
     model = load_model(model_path)
     print(f"Model loaded from {model_path}")
@@ -16,21 +17,23 @@ def evaluate_model(model_path, root_dir, batch_size=64):
     print(f"Test Accuracy: {test_accuracy:.4f}, Test Loss: {test_loss:.4f}")
 
     predictions = model.predict(test_gen)
-    y_pred = np.argmax(predictions, axis=1)
     
-    # Use `labels` instead of `classes` for NumpyArrayIterator
-    y_true = test_gen.labels
+    predicted_labels = np.argmax(predictions, axis=1)
+    true_labels = np.argmax(test_labels, axis=1)
+    
+    cm = confusion_matrix(true_labels, predicted_labels)
+    
+    report = classification_report(
+        true_labels, predicted_labels, target_names=CLASS_NAMES, zero_division=1)
+    print("Classification Report:")
+    print(report)
 
-    print("\nClassification Report:")
-    target_names = list(test_gen.class_indices.keys())
-    print(classification_report(y_true, y_pred, target_names=target_names))
-    
-    cm = confusion_matrix(y_true, y_pred)
     plt.figure(figsize=(8, 6))
-    sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', xticklabels=target_names, yticklabels=target_names)
-    plt.title("Confusion Matrix")
-    plt.ylabel("True Labels")
-    plt.xlabel("Predicted Labels")
+    sns.heatmap(cm, annot=True, fmt='d', cmap='Blues',
+                xticklabels=range(5), yticklabels=range(5))
+    plt.xlabel('Predicted')
+    plt.ylabel('True')
+    plt.title('Confusion Matrix')
     plt.show()
 
 if __name__ == "__main__":

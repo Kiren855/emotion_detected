@@ -92,4 +92,4 @@ def create_generators(root_dir ,batch_size=64, target_size=(48, 48)):
         shuffle=False
     )
     
-    return train_gen, val_gen, test_gen
+    return train_gen, val_gen, test_gen, test_labels
