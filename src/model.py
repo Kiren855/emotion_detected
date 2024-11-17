@@ -1,5 +1,5 @@
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Convolution2D, Activation, BatchNormalization, MaxPooling2D, Dropout, Dense, Flatten
+from tensorflow.keras.layers import Convolution2D, Activation, BatchNormalization, MaxPooling2D, Dropout, Dense, Flatten, GlobalAveragePooling2D
 
 def build_model():
     model = Sequential()
@@ -50,15 +50,17 @@ def build_model():
     model.add(MaxPooling2D(pool_size=(2, 2)))
     model.add(Dropout(0.3))
 
-    # Eighth Conv Block
+    # Eighth Conv Block (consider reducing pooling layers here)
     model.add(Convolution2D(64, (3, 3), padding='same'))
     model.add(BatchNormalization())
     model.add(Activation('elu'))
     model.add(MaxPooling2D(pool_size=(2, 2)))
     model.add(Dropout(0.3))
 
+    # Replace MaxPooling2D with GlobalAveragePooling2D to avoid size issues
+    model.add(GlobalAveragePooling2D())  # This will help prevent reducing dimensions too much
+
     # Flatten and Dense layers
-    model.add(Flatten())
     model.add(Dense(128, activation='elu', kernel_initializer='he_normal'))
     model.add(BatchNormalization())
     model.add(Dropout(0.3))
@@ -67,6 +69,5 @@ def build_model():
     model.add(Dropout(0.3))
 
     # Output layer
-    model.add(Dense(5 , activation='softmax'))
-
+    model.add(Dense(5, activation='softmax'))
     return model
