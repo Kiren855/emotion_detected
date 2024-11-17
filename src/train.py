@@ -1,5 +1,6 @@
 import os
 import tensorflow as tf
+import pandas as pd
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.callbacks import ModelCheckpoint
 from tensorflow.keras.utils import Progbar
@@ -7,6 +8,14 @@ from dataset import create_generators
 from model import build_model
 
 def train_model(root_dir, batch_size=64, epochs=20, output_model="emotion_model.h5"):
+    result_folder = "result"
+
+    if not os.path.exists(result_folder):
+        os.makedirs(result_folder)
+    
+    output_model_path = os.path.join(result_folder, output_model)
+    history_csv_path = os.path.join(result_folder, "training_history.csv")
+
     train_dir = os.path.join(root_dir, "train")
     val_dir = os.path.join(root_dir, "validation")
 
@@ -22,7 +31,7 @@ def train_model(root_dir, batch_size=64, epochs=20, output_model="emotion_model.
             metrics=["accuracy"]
         )
 
-        checkpoint = ModelCheckpoint(output_model, monitor="val_accuracy", save_best_only=True)
+        checkpoint = ModelCheckpoint(output_model_path, monitor="val_accuracy", save_best_only=True)
 
         history = model.fit(
                 train_gen,
@@ -31,9 +40,13 @@ def train_model(root_dir, batch_size=64, epochs=20, output_model="emotion_model.
                 callbacks=[checkpoint],
                 verbose=1
             )
-
-    print("Training complete. Best model saved to:", output_model)
-
+    
+    history_df = pd.DataFrame(history.history)
+    history_df.to_csv(history_csv_path, index=False)
+    
+    print("Training complete. Best model saved to:", output_model_path)
+    print("\nTraining history saved to:", history_csv_path)
+    
     print("\nTraining history:")
     for key in history.history.keys():
         print(f"{key}: {history.history[key]}")
