@@ -8,8 +8,8 @@ DATA_OUTPUT_PATH = '/kaggle/working/dataset/'
 IMAGE_WIDTH = 48
 IMAGE_HEIGHT = 48
 IMAGE_DEPTH = 1
-CLASS_LABELS = [2, 3, 4, 5, 6]
-CLASS_NAMES = ['Fear', 'Happy', 'Sad', 'Surprise', 'Neutral']
+CLASS_LABELS = [0, 1, 2, 3, 4, 5, 6]
+CLASS_NAMES = ['Anger', 'Disgust', 'Fear', 'Happy', 'Sad', 'Surprise', 'Neutral']
 
 
 def preprocess_pixels(pixel_string):
