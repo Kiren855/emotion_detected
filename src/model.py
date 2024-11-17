@@ -1,35 +1,30 @@
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, Dropout, Flatten, BatchNormalization, MaxPooling2D, Conv2D
+from tensorflow.keras.layers import Convolution2D, Activation, BatchNormalization, MaxPooling2D, Dropout, Dense, Flatten
 
-def build_model(input_shape=(48, 48, 1)):
+def build_model():
     
     model = Sequential()
-    
-    # Block 1
-    model.add(Conv2D(32, (3, 3), padding="Same", activation='relu', input_shape=input_shape))
-    model.add(BatchNormalization())
-    model.add(Conv2D(32, (3, 3), padding="Same", activation='relu'))
-    model.add(MaxPooling2D((2, 2)))
-    model.add(Dropout(0.3))
 
-    # Block 2
-    model.add(Conv2D(64, (3, 3), padding="Same", activation='relu'))
+    model.add(Convolution2D(64, (3, 3), padding='same', input_shape=(48,48,1)))
     model.add(BatchNormalization())
-    model.add(Conv2D(64, (3, 3), padding="Same", activation='relu'))
-    model.add(MaxPooling2D((2, 2)))
-    model.add(Dropout(0.3))
+    model.add(Activation('relu'))
+    model.add(MaxPooling2D(pool_size=(2, 2), strides=None, padding='same'))
+    model.add(Dropout(0.25))
 
-    # Block 3
-    model.add(Conv2D(128, (3, 3), padding="Same", activation='relu'))
+    model.add(Convolution2D(128, (5, 5), padding='same'))
     model.add(BatchNormalization())
-    model.add(Conv2D(128, (3, 3), padding="Same", activation='relu'))
-    model.add(MaxPooling2D((2, 2)))
-    model.add(Dropout(0.3))
+    model.add(Activation('relu'))
+    model.add(MaxPooling2D(pool_size=(2, 2), strides=None, padding='same'))
+    model.add(Dropout(0.25))
 
-    # Fully connected layers
     model.add(Flatten())
-    model.add(Dense(128, activation='relu'))
-    model.add(Dropout(0.5))
-    model.add(Dense(7, activation='softmax'))
+
+    model.add(Dense(256))
+    model.add(BatchNormalization())
+    model.add(Activation('relu'))
+    model.add(Dropout(0.25))
+
+    model.add(Dense(7))
+    model.add(Activation('softmax'))
     
     return model
