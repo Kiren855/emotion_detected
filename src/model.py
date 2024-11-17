@@ -67,6 +67,6 @@ def build_model():
     model.add(Dropout(0.3))
 
     # Output layer
-    model.add(Dense(7, activation='softmax'))
+    model.add(Dense(5, activation='softmax'))
 
     return model
