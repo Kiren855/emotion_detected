@@ -2,12 +2,16 @@ from tensorflow.keras.preprocessing.image import ImageDataGenerator
 import os
 
 def create_generators(train_dir=None, test_dir=None, batch_size=64, target_size=(48, 48)):
-    train_datagen = ImageDataGenerator(
-        width_shift_range=0.1,       
-        height_shift_range=0.1,   
-        horizontal_flip=True,      
+    train_datagen = ImageDataGenerator(     
         rescale=1./255,            
-        validation_split=0.2 
+        validation_split=0.2,
+        otation_range=5,
+        width_shift_range=0.2,
+        height_shift_range=0.2,
+        shear_range=0.2,
+        horizontal_flip=True,
+        vertical_flip=True,
+        fill_mode='nearest' 
     )
 
     validation_datagen = ImageDataGenerator(
