@@ -17,7 +17,9 @@ def evaluate_model(model_path, root_dir, batch_size=64):
 
     predictions = model.predict(test_gen)
     y_pred = np.argmax(predictions, axis=1)
-    y_true = test_gen.classes
+    
+    # Use `labels` instead of `classes` for NumpyArrayIterator
+    y_true = test_gen.labels
 
     print("\nClassification Report:")
     target_names = list(test_gen.class_indices.keys())
