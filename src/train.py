@@ -24,19 +24,14 @@ def train_model(root_dir, batch_size=64, epochs=20, output_model="emotion_model.
         )
 
         checkpoint = ModelCheckpoint(output_model, monitor="val_accuracy", save_best_only=True)
-        progbar = Progbar(epochs)
 
-        for epoch in range(epochs):
-            print(f"\nEpoch {epoch + 1}/{epochs}")
-
-            history = model.fit(
+        history = model.fit(
                 train_gen,
                 validation_data=val_gen, 
-                epochs=1, 
+                epochs=epochs, 
                 callbacks=[checkpoint],
                 verbose=1
             )
-            progbar.update(epoch + 1)
 
     print("Training complete. Best model saved to:", output_model)
 
