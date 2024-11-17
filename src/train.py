@@ -18,8 +18,8 @@ def train_model(root_dir, batch_size=64, epochs=20, output_model="emotion_model.
     
     train_gen, val_gen, _ = create_generators(train_dir, None, batch_size)
     
-    print("so luong train: ", train_gen)
-    print("so luong val: ", val_gen)
+    print("so luong train: ", len(train_gen))
+    print("so luong val: ", len(val_gen))
     
     model = build_model()
     
