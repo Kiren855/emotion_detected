@@ -4,6 +4,8 @@ from tensorflow.keras.callbacks import ModelCheckpoint
 from dataset import create_generators
 from model import build_model
 import tensorflow as tf 
+from tensorflow.keras.utils import plot_model
+
 import logging
 import warnings
 warnings.filterwarnings("ignore")
@@ -33,19 +35,14 @@ def train_model(root_dir, batch_size=64, epochs=20, output_model="emotion_model.
     
     model = build_model()
     
+    model_architecture_path = os.path.join(result_folder, 'model_architecture.png')
+    plot_model(model, to_file=model_architecture_path, show_shapes=True, show_layer_names=True)
+    
     model.compile(loss="categorical_crossentropy", 
                   optimizer = tf.keras.optimizers.Adam(learning_rate=0.001), 
                   metrics=['accuracy'])
         
     checkpoint = ModelCheckpoint(output_model_path, monitor="val_accuracy", save_best_only=True)
-    
-    early_stopping = tf.keras.callbacks.EarlyStopping(
-        monitor='val_accuracy',
-        min_delta=0.00008,
-        patience=11,
-        verbose=1,
-        restore_best_weights=True,
-    )
 
     lr_scheduler = tf.keras.callbacks.ReduceLROnPlateau(
         monitor='val_accuracy',
@@ -63,7 +60,6 @@ def train_model(root_dir, batch_size=64, epochs=20, output_model="emotion_model.
         validation_data=val_gen,
         validation_steps=7178 // 64,
         callbacks=[
-            early_stopping,
             lr_scheduler,
             checkpoint
         ]
