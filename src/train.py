@@ -25,8 +25,11 @@ def train_model(root_dir, batch_size=64, epochs=20, output_model="emotion_model.
     
     train_gen, val_gen, _ = create_generators(root_dir, batch_size)
     
-    print("size train: ", train_gen)
-    print("\nsize val: ", val_gen)
+    x_train, y_train = next(train_gen)
+    x_val, y_val = next(val_gen)
+
+    print("Train batch shape: ", x_train.shape, y_train.shape)
+    print("Validation batch shape: ", x_val.shape, y_val.shape)
     
     model = build_model()
     
