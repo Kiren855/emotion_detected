@@ -2,7 +2,7 @@ from tensorflow.keras.layers import Dense, Dropout, Conv2D, MaxPooling2D, BatchN
 from tensorflow.keras.models import Sequential
 import tensorflow as tf
 
-def build_improved_model(input_shape=(48, 48, 1)):
+def build_model(input_shape=(48, 48, 1)):
     model = Sequential()
 
     # First convolutional block
