@@ -7,6 +7,9 @@ from dataset import create_generators
 from model import build_model
 
 def train_model(root_dir, batch_size=64, epochs=20, output_model="emotion_model.h5"):
+    physical_devices = tf.config.list_physical_devices('GPU')
+    tf.config.experimental.set_memory_growth(physical_devices[0], True)
+  
     train_dir = os.path.join(root_dir, "train")
     val_dir = os.path.join(root_dir, "validation")
 
