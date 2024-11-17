@@ -15,7 +15,8 @@ def train_model(root_dir, batch_size=64, epochs=20, output_model="emotion_model.
     history_csv_path = os.path.join(result_folder, "training_history.csv")
 
     train_dir = os.path.join(root_dir, "train")
-
+    
+    print(f"Train data count: {len(os.listdir(train_dir))}")
     train_gen, val_gen, _ = create_generators(train_dir, None, batch_size)
 
     model = build_model()
@@ -25,7 +26,7 @@ def train_model(root_dir, batch_size=64, epochs=20, output_model="emotion_model.
                   metrics=['accuracy'])
         
     checkpoint = ModelCheckpoint(output_model_path, monitor="val_accuracy", save_best_only=True)
-
+    
     history = model.fit(
                 train_gen,
                 steps_per_epoch=len(train_gen) // batch_size,
