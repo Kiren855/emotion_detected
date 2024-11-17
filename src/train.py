@@ -46,10 +46,6 @@ def train_model(root_dir, batch_size=64, epochs=20, output_model="emotion_model.
     
     print("Training complete. Best model saved to:", output_model_path)
     print("\nTraining history saved to:", history_csv_path)
-    
-    print("\nTraining history:")
-    for key in history.history.keys():
-        print(f"{key}: {history.history[key]}")
 
 if __name__ == "__main__":
     import argparse
