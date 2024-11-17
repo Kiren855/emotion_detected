@@ -1,6 +1,7 @@
 import os
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.callbacks import ModelCheckpoint
+from tensorflow.keras.utils import Progbar
 from dataset import create_generators
 from model import build_model
 
@@ -8,7 +9,7 @@ def train_model(root_dir, batch_size=64, epochs=20, output_model="emotion_model.
     train_dir = os.path.join(root_dir, "train")
     val_dir = os.path.join(root_dir, "validation")
 
-    train_gen, val_gen, _ = create_generators(train_dir, val_dir, "", batch_size)
+    train_gen, val_gen, _ = create_generators(train_dir, val_dir, None, batch_size)
 
     model = build_model()
 
@@ -19,14 +20,20 @@ def train_model(root_dir, batch_size=64, epochs=20, output_model="emotion_model.
     )
 
     checkpoint = ModelCheckpoint(output_model, monitor="val_accuracy", save_best_only=True)
-
-    history = model.fit(
-        train_gen,
-        validation_data=val_gen, 
-        epochs=epochs,
-        callbacks=[checkpoint],
-        verbose=1 
-    )
+    progbar = Progbar(epochs)
+    
+    for epoch in range(epochs):
+        print(f"\nEpoch {epoch + 1}/{epochs}")
+        
+        history = model.fit(
+            train_gen,
+            validation_data=val_gen, 
+            epochs=1, 
+            callbacks=[checkpoint],
+            verbose=1
+        )
+        
+        progbar.update(epoch + 1)
 
     print("Training complete. Best model saved to:", output_model)
 
