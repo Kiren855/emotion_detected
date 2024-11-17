@@ -5,7 +5,6 @@ def create_generators(train_dir=None, test_dir=None, batch_size=64, target_size=
     train_datagen = ImageDataGenerator(     
         rescale=1./255,            
         validation_split=0.2,
-        otation_range=5,
         width_shift_range=0.2,
         height_shift_range=0.2,
         shear_range=0.2,
