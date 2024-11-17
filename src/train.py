@@ -16,7 +16,6 @@ def train_model(root_dir, batch_size=64, epochs=20, output_model="emotion_model.
 
     train_dir = os.path.join(root_dir, "train")
     
-    print(f"Train data count: {len(os.listdir(train_dir))}")
     train_gen, val_gen, _ = create_generators(train_dir, None, batch_size)
 
     model = build_model()
@@ -29,9 +28,9 @@ def train_model(root_dir, batch_size=64, epochs=20, output_model="emotion_model.
     
     history = model.fit(
                 train_gen,
-                steps_per_epoch=len(train_gen) // batch_size,
+                steps_per_epoch=28709 // 64,
                 validation_data=val_gen,
-                validation_steps=len(val_gen) // batch_size, 
+                validation_steps=7178 // 64, 
                 epochs=epochs, 
                 callbacks=[checkpoint],
                 verbose=1
