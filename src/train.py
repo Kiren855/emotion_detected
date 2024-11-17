@@ -21,7 +21,7 @@ def train_model(root_dir, batch_size=64, epochs=20, output_model="emotion_model.
     model = build_model()
     
     model.compile(loss="categorical_crossentropy", 
-                  optimizer= tf.keras.optimizers.Adam(lr=0.0001), 
+                  optimizer = tf.keras.optimizers.Adam(learning_rate=0.0001), 
                   metrics=['accuracy'])
         
     checkpoint = ModelCheckpoint(output_model_path, monitor="val_accuracy", save_best_only=True)
