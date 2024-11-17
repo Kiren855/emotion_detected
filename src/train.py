@@ -5,6 +5,8 @@ from dataset import create_generators
 from model import build_model
 import tensorflow as tf 
 import logging
+import warnings
+warnings.filterwarnings("ignore", category=UserWarning, module="keras")
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' 
 tf.get_logger().setLevel(logging.ERROR)
 
