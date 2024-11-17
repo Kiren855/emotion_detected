@@ -7,8 +7,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 def evaluate_model(model_path, root_dir, batch_size=64):
-    test_dir = os.path.join(root_dir, "test")
-    _, _, test_gen = create_generators(None, test_dir, batch_size)
+    _, _, test_gen = create_generators(None, root_dir, batch_size)
 
     model = load_model(model_path)
     print(f"Model loaded from {model_path}")
