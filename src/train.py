@@ -30,8 +30,8 @@ def train_model(root_dir, batch_size=64, epochs=20, output_model="emotion_model.
     x_train, y_train = next(train_gen)
     x_val, y_val = next(val_gen)
 
-    print("Train batch shape: ", x_train.shape, y_train.shape)
-    print("Validation batch shape: ", x_val.shape, y_val.shape)
+    print("Train batch shape: ", len(train_gen))
+    print("Validation batch shape: ", (len(val_gen)))
     
     model = build_model()
     
@@ -39,7 +39,7 @@ def train_model(root_dir, batch_size=64, epochs=20, output_model="emotion_model.
     plot_model(model, to_file=model_architecture_path, show_shapes=True, show_layer_names=True)
     
     model.compile(loss="categorical_crossentropy", 
-                  optimizer = tf.keras.optimizers.Adam(learning_rate=0.001), 
+                  optimizer = tf.keras.optimizers.Adam(learning_rate=0.0001), 
                   metrics=['accuracy'])
         
     checkpoint = ModelCheckpoint(output_model_path, monitor="val_accuracy", save_best_only=True)

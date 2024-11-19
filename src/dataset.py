@@ -18,7 +18,7 @@ def preprocess_pixels(pixel_string):
     return pixels.reshape((IMAGE_WIDTH, IMAGE_HEIGHT, IMAGE_DEPTH))
 
 
-def create_generators(root_dir ,batch_size=64, target_size=(48, 48)):
+def create_generators(root_dir ,batch_size=64):
     
     df = pd.read_csv(root_dir)
     
@@ -67,6 +67,7 @@ def create_generators(root_dir ,batch_size=64, target_size=(48, 48)):
         horizontal_flip=True,
         zca_whitening=False,
     )
+    
     validation_datagen = tf.keras.preprocessing.image.ImageDataGenerator(
         rescale=1./255)
     test_datagen = tf.keras.preprocessing.image.ImageDataGenerator(
