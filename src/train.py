@@ -58,7 +58,7 @@ def train_model(root_dir, batch_size=64, epochs=20, output_model="emotion_model.
         steps_per_epoch=len(train_gen),
         epochs=epochs,
         validation_data=val_gen,
-        validation_steps=len(val_gen),
+        validation_steps= 112,
         callbacks=[
             lr_scheduler,
             checkpoint
