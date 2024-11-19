@@ -39,7 +39,7 @@ def train_model(root_dir, batch_size=64, epochs=20, output_model="emotion_model.
     plot_model(model, to_file=model_architecture_path, show_shapes=True, show_layer_names=True)
     
     model.compile(loss="categorical_crossentropy", 
-                  optimizer = tf.keras.optimizers.Adam(learning_rate=0.0001), 
+                  optimizer = tf.keras.optimizers.Adam(learning_rate=0.01), 
                   metrics=['accuracy'])
         
     checkpoint = ModelCheckpoint(output_model_path, monitor="val_accuracy", save_best_only=True)
@@ -55,10 +55,10 @@ def train_model(root_dir, batch_size=64, epochs=20, output_model="emotion_model.
     
     history = model.fit(
         train_gen,
-        steps_per_epoch=28709 // 64,
+        steps_per_epoch=len(train_gen),
         epochs=epochs,
         validation_data=val_gen,
-        validation_steps=7178 // 64,
+        validation_steps=len(val_gen),
         callbacks=[
             lr_scheduler,
             checkpoint
